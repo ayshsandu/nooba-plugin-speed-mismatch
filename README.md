@@ -1,4 +1,4 @@
-nooba-plugin-template
+nooba-plugin-speedmismatch
 =====================
 
-template plugin for the current Nooba plugin API
+speedmismatch plugin for the current Nooba plugin API
