@@ -23,14 +23,20 @@ HEADERS += speedmismatchplugin.h speedmismatchplugin_global.h \
     NoobaVSSAD/filewriternode.h \
     NoobaVSSAD/featurenode.h \
     NoobaVSSAD/distancenode.h \
-    NoobaVSSAD/detectedevent.h
+    NoobaVSSAD/detectedevent.h \
+    speedmismatchnode.h \
+    NoobaVSSAD/distancechange.h \
+    NoobaVSSAD/delaynode.h
 SOURCES += speedmismatchplugin.cpp \
     NoobaVSSAD/speednode.cpp \
     NoobaVSSAD/readernode.cpp \
     NoobaVSSAD/filewriternode.cpp \
     NoobaVSSAD/featurenode.cpp \
     NoobaVSSAD/distancenode.cpp \
-    NoobaVSSAD/detecedevent.cpp
+    NoobaVSSAD/detecedevent.cpp \
+    speedmismatchnode.cpp \
+    NoobaVSSAD/distancechange.cpp \
+    NoobaVSSAD/delaynode.cpp
 
 CONFIG(debug, debug|release): DESTDIR = $$PWD/../../../NoobaVSS_build/NoobaFE/Debug/plugins/
 CONFIG(release, debug|release): DESTDIR = $$PWD/../../../NoobaVSS_build/NoobaFE/Release/plugins/
@@ -49,3 +55,6 @@ CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../NoobaVSS_build/Noob
 
 INCLUDEPATH += $$PWD/../../../NoobaVSS/NoobaPluginAPI/
 DEPENDPATH += $$PWD/../../../NoobaVSS/NoobaPluginAPI/
+
+OTHER_FILES += \
+    NoobaVSSAD/README.md

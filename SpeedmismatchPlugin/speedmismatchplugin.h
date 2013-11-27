@@ -4,6 +4,8 @@
 #include "speedmismatchplugin_global.h"
 #include "noobapluginapi.h"
 #include "NoobaVSSAD/detectedevent.h"
+#include "NoobaVSSAD/speednode.h"
+#include  "speedmismatchnode.h"
 
 #include <QObject>
 
@@ -24,9 +26,14 @@ public:
     bool release();
     PluginInfo getPluginInfo() const;
 
-    void inputData(const PluginPassData& data);
+
 
 public slots:
+    void onIntParamChanged(const QString& varName, int val);
+    void onMultiValParamChanged(const QString& varName, const QString& val);
+    void onCaptureEvent(QList<DetectedEvent> captured_event);
+
+    void inputData(const PluginPassData& data);
 
 signals:
     void generateEvent(QList<DetectedEvent> generated_event);
@@ -34,11 +41,18 @@ signals:
      * These functions will be called when the parameters are changed by the
      * user.
      */
-//    void onIntParamChanged(const QString& varName, int val);
+   // void onIntParamChanged(const QString& varName, int val);
 //    void onDoubleParamChanged(const QString& varName, double val);
 //    void onStringParamChanged(const QString& varName, const QString& val);
 //    void onMultiValParamChanged(const QString& varName, const QString& val);
 
+private:
+    QStringList set_speed_anomaly_list;
+    int Max_Speed_thresh;
+    int Min_Speed_thresh;
+    QString selected_anomaly;
+    speedmismatchnode BlobSpeedMismatchNode;
+    SpeedNode blobSpeedNode;
 
 };
 

@@ -4,22 +4,54 @@
 
 SpeedmismatchPlugin::SpeedmismatchPlugin()
 {
+    //qDebug()<<"-----------Speed Mismatch Plugin Initialized";
+    //debugMsg("Speed Mismatch Plugin Initialized");
 
 }
 
 SpeedmismatchPlugin::~SpeedmismatchPlugin()
 {
+    //debugMsg("Speed Mismatch Plugin Destructed");
 
 }
 
 bool SpeedmismatchPlugin::procFrame( const cv::Mat &in, cv::Mat &out, ProcParams &params )
 {
+//    QList<DetectedEvent> blobevents;
 
+//    blobevents.append(DetectedEvent("blob","1,1,10.0,10.0",1.0));
+//    blobevents.append(DetectedEvent("blob","2,1,100.0,100.0",1.0));
+//    blobevents.append(DetectedEvent("blob","3,1,160.0,180.0",1.0));
+
+//    emit generateEvent(blobevents);
     return true;
 }
 
 bool SpeedmismatchPlugin::init()
 {
+    Max_Speed_thresh = 60;
+    Min_Speed_thresh = 30;
+
+    BlobSpeedMismatchNode.setMaxSpeedThresh(Max_Speed_thresh);
+    BlobSpeedMismatchNode.setMinSpeedThresh(Min_Speed_thresh);
+
+    createIntParam("Max_Speed",Max_Speed_thresh,100,0);
+    createIntParam("Min_Speed",Min_Speed_thresh,100,0);
+
+    set_speed_anomaly_list.append("Max Speed Limit Anomaly");
+    set_speed_anomaly_list.append("Min Speed Limit Anomaly");
+    set_speed_anomaly_list.append("Speed Range Limit Anomaly");
+
+    selected_anomaly =  set_speed_anomaly_list.at(0);
+
+    createMultiValParam("Select Speed anomaly", set_speed_anomaly_list);
+
+    connect(this, SIGNAL(generateEvent(QList<DetectedEvent>)), &blobSpeedNode, SLOT(captureEvent(QList<DetectedEvent>)));
+    connect(&blobSpeedNode, SIGNAL(generateEvent(QList<DetectedEvent>)), &BlobSpeedMismatchNode, SLOT(captureEvent(QList<DetectedEvent>)));
+    connect(&BlobSpeedMismatchNode, SIGNAL(generateEvent(QList<DetectedEvent>)), this, SLOT(captureEvent(QList<DetectedEvent>)));
+
+    debugMsg("Speed Mismatch Plugin Initialized");
+
     return true;
 }
 
@@ -34,11 +66,48 @@ PluginInfo SpeedmismatchPlugin::getPluginInfo() const
         "Speed Mismatch Plugin",
         0,
         1,
-        "Plugin to detect soeed anomalies",
+        "Plugin to detect speed anomalies",
         "Ayesha Dissanayaka");
     return pluginInfo;
 
  }
+
+void SpeedmismatchPlugin::onIntParamChanged(const QString& varName, int val){
+
+    if(varName =="Max_Speed"){
+        // assign value to max_speed_variable to compare
+        Max_Speed_thresh = val;
+        BlobSpeedMismatchNode.setMaxSpeedThresh(Max_Speed_thresh);
+        debugMsg("Max_Speed Threshold set to "  + QString("%1").arg(val));
+
+
+    }
+    if(varName =="Min_Speed"){
+        // assign value to min_speed_variable to compare
+        Min_Speed_thresh = val;
+        BlobSpeedMismatchNode.setMinSpeedThresh(Min_Speed_thresh);
+        set_speed_anomaly_list.append("Min Speed Limit Anomaly");debugMsg("Min_Speed Threshold set to "  + QString("%1").arg(val));
+
+    }
+}
+
+void SpeedmismatchPlugin::onMultiValParamChanged(const QString &varName, const QString &val){
+    if(varName =="Select Speed anomaly"){
+        // assign value to max_speed_variable to compare
+        selected_anomaly = set_speed_anomaly_list.at(val.toInt());
+        BlobSpeedMismatchNode.setSpeedAnomaly(selected_anomaly);
+        debugMsg("Speed anomaly set to "  +QString("%1").arg(selected_anomaly));
+    }
+}
+
+void SpeedmismatchPlugin::onCaptureEvent(QList<DetectedEvent> captured_event){
+
+    foreach(DetectedEvent e, captured_event){
+        debugMsg(QString(e.getIdentifier() + " " + e.getMessage() + " %1").arg(e.getConfidence()));
+    }
+    return;
+
+}
 
 void SpeedmismatchPlugin::inputData(const PluginPassData& data){
 
@@ -50,6 +119,7 @@ void SpeedmismatchPlugin::inputData(const PluginPassData& data){
     }
     emit generateEvent(receivedEvents);
 }
+
 
 // see qt4 documentation for details on the macro (Qt Assistant app)
 // Mandatory  macro for plugins in qt4. Made obsolete in qt5
