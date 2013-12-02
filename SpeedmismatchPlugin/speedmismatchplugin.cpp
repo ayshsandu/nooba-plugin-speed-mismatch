@@ -17,13 +17,16 @@ SpeedmismatchPlugin::~SpeedmismatchPlugin()
 
 bool SpeedmismatchPlugin::procFrame( const cv::Mat &in, cv::Mat &out, ProcParams &params )
 {
-//    QList<DetectedEvent> blobevents;
+    QList<DetectedEvent> blobevents;
 
-//    blobevents.append(DetectedEvent("blob","1,1,10.0,10.0",1.0));
-//    blobevents.append(DetectedEvent("blob","2,1,100.0,100.0",1.0));
-//    blobevents.append(DetectedEvent("blob","3,1,160.0,180.0",1.0));
+    blobevents.append(DetectedEvent("blob","1,1,100.0,100.0",1.0));
+    blobevents.append(DetectedEvent("blob","2,2,1000.0,100.0",1.0));
+    blobevents.append(DetectedEvent("blob","3,1,160.0,100.0",1.0));
+    blobevents.append(DetectedEvent("blob","4,1,260.0,100.0",1.0));
+    blobevents.append(DetectedEvent("blob","5,2,2000.0,100.0",1.0));
+    blobevents.append(DetectedEvent("blob","6,1,100.0,180.0",1.0));
 
-//    emit generateEvent(blobevents);
+    emit generateEvent(blobevents);
     return true;
 }
 
@@ -48,10 +51,19 @@ bool SpeedmismatchPlugin::init()
 
     connect(this, SIGNAL(generateEvent(QList<DetectedEvent>)), &blobSpeedNode, SLOT(captureEvent(QList<DetectedEvent>)));
     connect(&blobSpeedNode, SIGNAL(generateEvent(QList<DetectedEvent>)), &BlobSpeedMismatchNode, SLOT(captureEvent(QList<DetectedEvent>)));
-    connect(&BlobSpeedMismatchNode, SIGNAL(generateEvent(QList<DetectedEvent>)), this, SLOT(captureEvent(QList<DetectedEvent>)));
+    connect(&BlobSpeedMismatchNode, SIGNAL(generateEvent(QList<DetectedEvent>)), this, SLOT(onCaptureEvent(QList<DetectedEvent>)));
 
     debugMsg("Speed Mismatch Plugin Initialized");
 
+//    QList<DetectedEvent> blobevents;
+
+//    blobevents.append(DetectedEvent("blob","4,1,10.0,10.0",1.0));
+//    blobevents.append(DetectedEvent("blob","5,1,2000.0,200.0",1.0));
+//    blobevents.append(DetectedEvent("blob","6,1,1600.0,180.0",1.0));
+
+//    emit generateEvent(blobevents);
+
+    // debugMsg("initializing");
     return true;
 }
 

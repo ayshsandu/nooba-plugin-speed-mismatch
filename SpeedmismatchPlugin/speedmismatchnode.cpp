@@ -34,21 +34,21 @@ void speedmismatchnode::processEvents(const QList<DetectedEvent> event)
                         QList<QString> message = e.getMessage().split(",");
                         //speedEvents.insert(message.at(1),e);
                         if(Selected_Anmaly == SPEEDANOMALYMAX){
-                            int speed = message.at(2).toInt();
+                            int speed = message.at(2).toFloat();
                             if(isMaxSpeedThresholdpassed(speed)){
                                 speedMismatchEvent.append(DetectedEvent("SPMMObj",QString("Frame %1,Blob %2, passed max speed, %3").arg(message.at(0)).arg(message.at(1)).arg(message.at(2)),1.0));
 
                             }
                         }
                         else if(Selected_Anmaly == SPEEDANOMALYMIN){
-                            int speed = message.at(2).toInt();
+                            int speed = message.at(2).toFloat();
                             if(isMinSpeedThresholdBelowed(speed)){
                                 speedMismatchEvent.append(DetectedEvent("SPMMObj",QString("Frame %1,Blob %2, Less than min speed, %3").arg(message.at(0)).arg(message.at(1)).arg(message.at(2)),1.0));
 
                             }
                         }
                         else if(Selected_Anmaly == SPEEDANOMALYRANGE){
-                            int speed = message.at(2).toInt();
+                            int speed = message.at(2).toFloat();
                             if(isMaxSpeedThresholdpassed(speed) && isMinSpeedThresholdBelowed(speed)){
                                 speedMismatchEvent.append(DetectedEvent("SPMMObj",QString("Frame %1,Blob %2, is out of speed range, %3").arg(message.at(0)).arg(message.at(1)).arg(message.at(2)),1.0));
 

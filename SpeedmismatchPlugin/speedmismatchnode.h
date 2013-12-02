@@ -2,14 +2,12 @@
 #define SPEEDMISMATCHNODE_H
 #include <QtCore>
 #include <NoobaVSSAD/featurenode.h>
-#include <NoobaVSSAD/detectedevent.h>
-
 
 class speedmismatchnode: public FeatureNode
 {
 public:
     explicit speedmismatchnode(FeatureNode* parent = 0);
-    ~speedmismatchnode();
+    //~speedmismatchnode();
 
     void processEvents(const QList<DetectedEvent> event);
     //speedmismatchnode();
