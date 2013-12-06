@@ -26,7 +26,8 @@ HEADERS += speedmismatchplugin.h speedmismatchplugin_global.h \
     NoobaVSSAD/detectedevent.h \
     speedmismatchnode.h \
     NoobaVSSAD/distancechange.h \
-    NoobaVSSAD/delaynode.h
+    NoobaVSSAD/delaynode.h \
+    configuration.h
 SOURCES += speedmismatchplugin.cpp \
     NoobaVSSAD/speednode.cpp \
     NoobaVSSAD/readernode.cpp \
@@ -36,7 +37,8 @@ SOURCES += speedmismatchplugin.cpp \
     NoobaVSSAD/detecedevent.cpp \
     speedmismatchnode.cpp \
     NoobaVSSAD/distancechange.cpp \
-    NoobaVSSAD/delaynode.cpp
+    NoobaVSSAD/delaynode.cpp \
+    configuration.cpp
 
 CONFIG(debug, debug|release): DESTDIR = $$PWD/../../../NoobaVSS_build/NoobaFE/Debug/plugins/
 CONFIG(release, debug|release): DESTDIR = $$PWD/../../../NoobaVSS_build/NoobaFE/Release/plugins/

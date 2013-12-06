@@ -17,11 +17,20 @@ void speedmismatchnode::setSpeedAnomaly(QString val){
     Selected_Anmaly = val;
 }
 
+void speedmismatchnode::setCrowdType(QString val){
+
+    Selected_crowd_type=val;
+}
+
 void speedmismatchnode::processEvents(const QList<DetectedEvent> event)
 {
-    SPEEDANOMALYMAX = "Max Speed Limit Anomaly";
-    SPEEDANOMALYMIN = "Min Speed Limit Anomaly";
-    SPEEDANOMALYRANGE = "Speed Range Limit Anomaly";
+//    SPEEDANOMALYMAX = "Max Speed Limit Anomaly";
+//    SPEEDANOMALYMIN = "Min Speed Limit Anomaly";
+//    SPEEDANOMALYRANGE = "Speed Range Limit Anomaly";
+
+    SPEEDANOMALYMAX = config.getItemSpeedAnomalyMax();
+    SPEEDANOMALYMIN = config.getItemSpeedAnomalyMin();
+    SPEEDANOMALYRANGE = config.getItemSpeedAnomalyRange();
 
     QList<DetectedEvent> speedMismatchEvent;
 
@@ -49,7 +58,7 @@ void speedmismatchnode::processEvents(const QList<DetectedEvent> event)
                         }
                         else if(Selected_Anmaly == SPEEDANOMALYRANGE){
                             int speed = message.at(2).toFloat();
-                            if(isMaxSpeedThresholdpassed(speed) && isMinSpeedThresholdBelowed(speed)){
+                            if(isMaxSpeedThresholdpassed(speed) | isMinSpeedThresholdBelowed(speed)){
                                 speedMismatchEvent.append(DetectedEvent("SPMMObj",QString("Frame %1,Blob %2, is out of speed range, %3").arg(message.at(0)).arg(message.at(1)).arg(message.at(2)),1.0));
 
                             }

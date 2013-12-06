@@ -6,6 +6,7 @@
 #include "NoobaVSSAD/detectedevent.h"
 #include "NoobaVSSAD/speednode.h"
 #include  "speedmismatchnode.h"
+#include "configuration.h"
 
 #include <QObject>
 
@@ -34,6 +35,7 @@ public slots:
     void onCaptureEvent(QList<DetectedEvent> captured_event);
 
     void inputData(const PluginPassData& data);
+    void inputData(const QStringList &strList, QList<QImage> imageList);
 
 signals:
     void generateEvent(QList<DetectedEvent> generated_event);
@@ -48,11 +50,14 @@ signals:
 
 private:
     QStringList set_speed_anomaly_list;
+    QStringList set_anomaly_crowd_type;
     int Max_Speed_thresh;
     int Min_Speed_thresh;
     QString selected_anomaly;
+    QString selected_crowd_type;
     speedmismatchnode BlobSpeedMismatchNode;
     SpeedNode blobSpeedNode;
+    Configuration config;
 
 };
 
