@@ -33,11 +33,6 @@ bool SpeedmismatchPlugin::procFrame( const cv::Mat &in, cv::Mat &out, ProcParams
 bool SpeedmismatchPlugin::init()
 {
 
-
-//    set_speed_anomaly_list.append("Max Speed Limit Anomaly");
-//    set_speed_anomaly_list.append("Min Speed Limit Anomaly");
-//    set_speed_anomaly_list.append("Speed Range Limit Anomaly");
-
     set_speed_anomaly_list.append(config.getItemSpeedAnomalyMax());
     set_speed_anomaly_list.append(config.getItemSpeedAnomalyMin());
     set_speed_anomaly_list.append(config.getItemSpeedAnomalyRange());
@@ -57,10 +52,13 @@ bool SpeedmismatchPlugin::init()
     createIntParam(config.getLableMinSpeed(),Min_Speed_thresh,config.getMinSpeedUpperBound(),config.getMinSpeedLowerBound());
     createMultiValParam(config.getLableSeleceSpeedAnomaly(), set_speed_anomaly_list);
 
+    mismatchCount=0;
     /**connect signals and slots*/
     connect(this, SIGNAL(generateEvent(QList<DetectedEvent>)), &blobSpeedNode, SLOT(captureEvent(QList<DetectedEvent>)));//captures blob events from currents node>>to speed node to calculate speed
     connect(&blobSpeedNode, SIGNAL(generateEvent(QList<DetectedEvent>)), &BlobSpeedMismatchNode, SLOT(captureEvent(QList<DetectedEvent>)));// speed node output >> speed mismatch desiding node
     connect(&BlobSpeedMismatchNode, SIGNAL(generateEvent(QList<DetectedEvent>)), this, SLOT(onCaptureEvent(QList<DetectedEvent>)));//speed mismatch deciding node result>> current node to show out put
+
+    //createFrameViewer("test",true);
 
     debugMsg("Speed Mismatch Plugin Initialized");
 
@@ -79,7 +77,7 @@ PluginInfo SpeedmismatchPlugin::getPluginInfo() const
         0,
         1,
         "Plugin to detect speed mismatching anomalies",
-        "Ayesha Dissanayaka");
+        "Team Nooba");
     return pluginInfo;
 
  }
@@ -106,7 +104,7 @@ void SpeedmismatchPlugin::onIntParamChanged(const QString& varName, int val){
 void SpeedmismatchPlugin::onMultiValParamChanged(const QString &varName, const QString &val){
     if(varName ==config.getLableSeleceSpeedAnomaly()){
         // load GUI input selection to select anomaly type
-        selected_anomaly = set_speed_anomaly_list.at(val.toInt());
+        selected_anomaly = val;
         BlobSpeedMismatchNode.setSpeedAnomaly(selected_anomaly);
         debugMsg("Speed anomaly set to "  +QString("%1").arg(selected_anomaly));
     }
@@ -114,23 +112,29 @@ void SpeedmismatchPlugin::onMultiValParamChanged(const QString &varName, const Q
 
 void SpeedmismatchPlugin::onCaptureEvent(QList<DetectedEvent> captured_event){
 
+    mismatchCount++;
+           if(mismatchCount<5){return;}
     foreach(DetectedEvent e, captured_event){
-        debugMsg(QString("<FONT COLOR='#ff0000'>"+e.getIdentifier() + " " + e.getMessage() + " %1").arg(e.getConfidence()));
-         }
+
+         debugMsg(QString("<FONT COLOR='#ff0000'>"+e.getIdentifier() + " " + e.getMessage() + " %1").arg(e.getConfidence()));
+         //debugMsg(QString(e.getIdentifier() + " " + e.getMessage() + " %1").arg(e.getConfidence()));
+         generateAlert("SMD Output","------",nooba::RedAlert);
+    }
     return;
 
 }
 
+
 void SpeedmismatchPlugin::inputData(const PluginPassData& data){
 
-    //qDebug()<<"aaaaaabbbbb";
-    QList<DetectedEvent> receivedEvents;
+     QList<DetectedEvent> receivedEvents;
     foreach(QString str,data.strList()){
         debugMsg("recv" + str);
         QList<QString> parameters = str.split(" ");
         receivedEvents.append(DetectedEvent(parameters.at(0),parameters.at(1),parameters.at(2).toFloat()));
     }
     emit generateEvent(receivedEvents);
+
 }
 
 void SpeedmismatchPlugin::inputData(const QStringList &strList, QList<QImage> imageList){
@@ -145,6 +149,15 @@ void SpeedmismatchPlugin::inputData(const QStringList &strList, QList<QImage> im
     }
 
      emit generateEvent(receivedEvents);
+
+    //cv::Mat lineviewer(temp.height(),temp.width(),CV_8UC3,(uchar*)temp.bits(),temp.bytesPerLine());
+
+
+    //cv::Mat frame(imageList.at(0).height(),imageList.at(0).width(),CV_8UC3,(uchar*)imageList.at(0).bits(),imageList.at(0).bytesPerLine());
+    //cv::Mat bgmask(imageList.at(1).height(),imageList.at(1).width(),CV_8UC1,(uchar*)imageList.at(1).bits(),imageList.at(1).bytesPerLine());
+    //cv::imshow("test",bgmask);
+    //updateFrameViewer("test",gener);
+
 }
 
 //void SpeedmismatchPlugin::in

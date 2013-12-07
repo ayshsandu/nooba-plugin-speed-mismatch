@@ -25,13 +25,13 @@ public:
     int getMinSpeedLowerBound();
 
 private:
-    static const QString ITEM_SPEED_ANOMALY_MAX;// = "Max Speed Limit Anomaly";
-    static const QString ITEM_SPEED_ANOMALY_MIN;// = "Min Speed Limit Anomaly";
-    static const QString ITEM_SPEED_ANOMALY_RANGE;// = "Speed Range Limit Anomaly";
+    static const QString ITEM_SPEED_ANOMALY_MAX;
+    static const QString ITEM_SPEED_ANOMALY_MIN;
+    static const QString ITEM_SPEED_ANOMALY_RANGE;
 
-    static const QString LABLE_MAX_SPEED;// = "Max Speed";
-    static const QString LABLE_MIN_SPEED;// = "Min Speed";
-    static const QString LABLE_SELECT_ANOMALY ;//= "Selece Speed Anomaly";
+    static const QString LABLE_MAX_SPEED;
+    static const QString LABLE_MIN_SPEED;
+    static const QString LABLE_SELECT_ANOMALY ;
 
     static const int DEFAULT_MAX_SPEED;
     static const int DEFAULT_MIN_SPEED;

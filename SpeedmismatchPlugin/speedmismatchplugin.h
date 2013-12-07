@@ -58,6 +58,8 @@ private:
     speedmismatchnode BlobSpeedMismatchNode;
     SpeedNode blobSpeedNode;
     Configuration config;
+    int mismatchCount;
+
 
 };
 

@@ -17,6 +17,7 @@ public:
     void setCrowdType(QString val);
     //void
 
+
 private:
     int Max_Speed_Thresh;
     int Min_Speed_Thresh;
@@ -25,10 +26,9 @@ private:
 
     Configuration config;
 
-    QString SPEEDANOMALYMAX ;//= "Max Speed Limit Anomaly";
-    QString SPEEDANOMALYMIN ;//= "Min Speed Limit Anomaly";
-    QString SPEEDANOMALYRANGE ;//= "Speed Range Limit Anomaly";
-
+    QString SPEEDANOMALYMAX ;
+    QString SPEEDANOMALYMIN ;
+    QString SPEEDANOMALYRANGE ;
     bool isMaxSpeedThresholdpassed(int val);
     bool isMinSpeedThresholdBelowed(int val);
 

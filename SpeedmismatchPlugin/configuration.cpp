@@ -30,10 +30,10 @@ const QString Configuration::LABLE_MAX_SPEED = "Max Speed";
 const QString Configuration::LABLE_MIN_SPEED = "Min Speed";
 const QString Configuration::LABLE_SELECT_ANOMALY = "Select Speed Anomaly";
 
-const int Configuration::DEFAULT_MAX_SPEED=60;
+const int Configuration::DEFAULT_MAX_SPEED=150;
 const int Configuration::DEFAULT_MIN_SPEED=30;
 
-const int Configuration::MAX_SPEED_UPPER_BOUND=1000;
+const int Configuration::MAX_SPEED_UPPER_BOUND=2000;
 const int Configuration::MAX_SPEED_LOWER_BOUND=0;
-const int Configuration::MIN_SPEED_UPPER_BOUND=1000;
+const int Configuration::MIN_SPEED_UPPER_BOUND=2000;
 const int Configuration::MIN_SPEED_LOWER_BOUND=0;

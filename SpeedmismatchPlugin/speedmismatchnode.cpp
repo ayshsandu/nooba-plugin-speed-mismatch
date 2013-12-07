@@ -24,9 +24,6 @@ void speedmismatchnode::setCrowdType(QString val){
 
 void speedmismatchnode::processEvents(const QList<DetectedEvent> event)
 {
-//    SPEEDANOMALYMAX = "Max Speed Limit Anomaly";
-//    SPEEDANOMALYMIN = "Min Speed Limit Anomaly";
-//    SPEEDANOMALYRANGE = "Speed Range Limit Anomaly";
 
     SPEEDANOMALYMAX = config.getItemSpeedAnomalyMax();
     SPEEDANOMALYMIN = config.getItemSpeedAnomalyMin();
@@ -41,7 +38,7 @@ void speedmismatchnode::processEvents(const QList<DetectedEvent> event)
                     //If already exists the key, this will replace the previous version
                     foreach(DetectedEvent e, event){
                         QList<QString> message = e.getMessage().split(",");
-                        //speedEvents.insert(message.at(1),e);
+
                         if(Selected_Anmaly == SPEEDANOMALYMAX){
                             int speed = message.at(2).toFloat();
                             if(isMaxSpeedThresholdpassed(speed)){
