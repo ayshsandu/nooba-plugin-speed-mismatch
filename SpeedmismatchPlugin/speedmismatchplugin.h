@@ -36,6 +36,7 @@ public slots:
 
     void inputData(const PluginPassData& data);
     void inputData(const QStringList &strList, QList<QImage> imageList);
+    QImage convertToQImage(cv::Mat &cvImg);
 
 signals:
     void generateEvent(QList<DetectedEvent> generated_event);

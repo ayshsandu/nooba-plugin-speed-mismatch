@@ -58,7 +58,7 @@ bool SpeedmismatchPlugin::init()
     connect(&blobSpeedNode, SIGNAL(generateEvent(QList<DetectedEvent>)), &BlobSpeedMismatchNode, SLOT(captureEvent(QList<DetectedEvent>)));// speed node output >> speed mismatch desiding node
     connect(&BlobSpeedMismatchNode, SIGNAL(generateEvent(QList<DetectedEvent>)), this, SLOT(onCaptureEvent(QList<DetectedEvent>)));//speed mismatch deciding node result>> current node to show out put
 
-    //createFrameViewer("test",true);
+    createFrameViewer("test",true);
 
     debugMsg("Speed Mismatch Plugin Initialized");
 
@@ -118,7 +118,7 @@ void SpeedmismatchPlugin::onCaptureEvent(QList<DetectedEvent> captured_event){
 
          debugMsg(QString("<FONT COLOR='#ff0000'>"+e.getIdentifier() + " " + e.getMessage() + " %1").arg(e.getConfidence()));
          //debugMsg(QString(e.getIdentifier() + " " + e.getMessage() + " %1").arg(e.getConfidence()));
-         generateAlert("SMD Output","------",nooba::RedAlert);
+         generateAlert("test","------",nooba::RedAlert);
     }
     return;
 
@@ -153,11 +153,23 @@ void SpeedmismatchPlugin::inputData(const QStringList &strList, QList<QImage> im
     //cv::Mat lineviewer(temp.height(),temp.width(),CV_8UC3,(uchar*)temp.bits(),temp.bytesPerLine());
 
 
-    //cv::Mat frame(imageList.at(0).height(),imageList.at(0).width(),CV_8UC3,(uchar*)imageList.at(0).bits(),imageList.at(0).bytesPerLine());
+    cv::Mat frame(imageList.at(0).height(),imageList.at(0).width(),CV_8UC3,(uchar*)imageList.at(0).bits(),imageList.at(0).bytesPerLine());
     //cv::Mat bgmask(imageList.at(1).height(),imageList.at(1).width(),CV_8UC1,(uchar*)imageList.at(1).bits(),imageList.at(1).bytesPerLine());
     //cv::imshow("test",bgmask);
-    //updateFrameViewer("test",gener);
+    updateFrameViewer("test",convertToQImage(frame));
 
+}
+
+QImage SpeedmismatchPlugin::convertToQImage(cv::Mat &cvImg)
+{
+    if (cvImg.channels()== 1){
+        QImage img((uchar*)cvImg.data, cvImg.cols, cvImg.rows, cvImg.step1(), QImage::Format_Indexed8);
+        return img;
+    }
+    else{
+        QImage img((uchar*)cvImg.data, cvImg.cols, cvImg.rows, cvImg.step1(), QImage::Format_RGB888);
+        return img;
+    }
 }
 
 //void SpeedmismatchPlugin::in
